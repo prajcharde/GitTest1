@@ -1,0 +1,191 @@
+﻿@model Assignment7.Repository.Entity.Employee
+
+@{
+    ViewBag.Title = "Create";
+}
+<html>
+<head>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/smoothness/jquery-ui.min.css" rel="stylesheet" type="text/css" />
+    <!-- jQuery Reference (from CDN) -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <!-- jQueryUI Reference (from CDN) -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+
+</head>
+<body>
+    <style>
+        
+        .btn-file {
+            position: relative;
+            overflow: hidden;
+        }
+
+            .btn-file input[type=file] {
+                position: absolute;
+                top: 0;
+                right: 0;
+                min-width: 100%;
+                min-height: 100%;
+                font-size: 100px;
+                text-align: right;
+                filter: alpha(opacity=0);
+                opacity: 0;
+                outline: none;
+                background: white;
+                cursor: inherit;
+                display: block;
+            }
+
+       
+    </style>
+    <div class="container"style="width:500px">
+        <h2>Create</h2>
+        <div class="progress">
+            <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+        </div>
+
+        <div class="alert alert-success" role="alert">Task Completed</div>
+
+        <script>
+var $progress = $('.progress');
+var $progressBar = $('.progress-bar');
+var $alert = $('.alert');
+
+setTimeout(function() {
+    $progressBar.css('width', '10%');
+    setTimeout(function() {
+        $progressBar.css('width', '30%');
+        setTimeout(function() {
+            $progressBar.css('width', '100%');
+            setTimeout(function() {
+                $progress.css('display', 'none');
+                $alert.css('display', 'block');
+            }, 500);
+        }, 2000);
+    }, 1000);
+}, 1000);
+        </script>
+
+        @using (Html.BeginForm("Create", "Home", FormMethod.Post,
+ new { id = "MyForm", @enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                <h4>Employee</h4>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+                        @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.MaritalStatus, htmlAttributes: new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+                        <div class="checkbox">
+                            @Html.EditorFor(model => model.MaritalStatus)
+                            @Html.ValidationMessageFor(model => model.MaritalStatus, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.State, htmlAttributes: new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+                        @Html.DropDownListFor(model => model.State,
+                        new SelectList(ViewBag.StateList, "StateId", "StateName"),
+                        "Select state",new { @class = "form-control", @onchange = "FillCity()" })
+                        @Html.ValidationMessageFor(model => model.State, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.City, htmlAttributes: new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+                        @Html.DropDownListFor(model => model.City,new SelectList(Enumerable.Empty<SelectListItem>(), "CityId", "CityName"),
+                       "Select city",new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+               <div class="editor-field">
+                    <input type="file" name="imageFile" id="imageFile" />
+                    <img id="blah" src="#" alt=""/>
+                    @Html.ValidationMessageFor(model => model.image)
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Create" class="btn btn-success" />
+                        @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-primary btn-large" })
+                        <input type="reset" value="Reset" class="btn btn-warning" />
+                    </div>
+                </div>
+                
+            </div>
+           
+        }
+    </>
+    <script>
+  function FillCity() {
+    var stateId = $('#State').val();
+    $.ajax({
+        url: '/Home/FillCity',
+        type: "GET",
+        dataType: "JSON",
+        data: { State: stateId},
+        success: function (cities) {
+            $("#City").html(""); // clear before appending new list
+            $.each(cities, function (i, city) {
+                $("#City").append(
+                    $('<option></option>').val(city.CityId).html(city.CityName));
+            });
+        }
+    });
+  }
+    </script>
+        <script>
+            function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#blah').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+            $("#imageFile").change(function () {
+                readURL(this);
+            });
+        </script>
+        </div>
+    
+</body>
+</html>
